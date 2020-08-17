@@ -1,6 +1,5 @@
 <template lang="pug">
-	vue-page-transition(name="fade")
-		router-view
+	router-view
 </template>
 
 <script>
