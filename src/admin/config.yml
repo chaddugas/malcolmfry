@@ -1,0 +1,61 @@
+backend:
+  name: git-gateway
+  branch: master
+  accept_roles:
+    - admin
+    - editor
+
+site_url: https://chaddugas.me
+display_url: https://chaddugas.me
+
+logo_url: /media/logo/logo.svg
+
+show_preview_links: true
+
+media_folder: 'static/media'
+public_folder: '/media'
+
+collections:
+  - name: 'content'
+    label: 'Site Content'
+    editor:
+      preview: false
+    files:
+      - name: 'projects'
+        label: 'Projects' 
+        file: 'static/data/projects.json'
+        fields:
+          - label: 'Projects' 
+            name: 'projects'
+            widget: 'list'
+            allow_add: true
+            required: true
+            fields:
+              - {label: 'Title', name: 'title', widget: 'string'}
+              - {label: 'Photo', name: 'photo', widget: 'image'}
+              - {label: 'Secondary Photo', name: 'secondary_photo', widget: 'image', required: false}
+              - {label: 'Description', name: 'description', widget: 'markdown'}
+              - {label: 'Link', name: 'link', widget: 'string'}
+              - {label: 'Visible', name: 'visible', widget: 'boolean', default: true}
+
+      - name: 'about'
+        label: 'About' 
+        file: 'static/data/about.json'
+        fields:
+          - {label: 'Title', name: 'title', widget: 'string'}
+          - {label: 'Content', name: 'content', widget: 'markdown'}
+
+      - name: 'contact'
+        label: 'Contacts' 
+        file: 'static/data/contact.json'
+        fields:
+          - {label: 'Title', name: 'title', widget: 'string'}
+          - label: 'Contact Item' 
+            name: 'contacts'
+            widget: 'list'
+            allow_add: true
+            required: true
+            fields:
+              - {label: 'Title', name: 'title', widget: 'string'}
+              - {label: 'Logo', name: 'logo', widget: 'string'}
+              - {label: 'Link', name: 'link', widget: 'string'}

@@ -1,0 +1,36 @@
+$black: #000000;
+$white: #ffffff;
+
+$gray: #F1F1FB;
+$onyx: #232126;
+
+$slate: #253A52;
+
+$pink: #d576c8;
+$blue: #5adef5;
+
+$dark_blue: darken($blue, 20%);
+$dark_pink: darken($pink, 15%);
+
+$palette: $pink, $blue;
+
+$paletteJSON: '';
+@each $color in $palette {
+	$paletteJSON: $paletteJSON + '"#{$color}",';
+}
+$paletteJSON: #{"[" + str-slice($paletteJSON, 1, -2) + "]"};
+
+$xs: 450px;
+$sm: 650px;
+$md: 850px;
+$lg: 1100px;
+$xl: 1400px;
+
+
+$headings: 'Inconsolata';
+
+$h_weight: 500;
+$h_size: 1.2rem;
+$body: 'Inconsolata';
+$b_weight: 300;
+$b_size: 1rem;

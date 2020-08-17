@@ -1,0 +1,9 @@
+{
+	"id": "digiline",
+	"name": "DIGILINE",
+	"text_hover": "read the case study...",
+	"blurb": "Platform for cross functional web components.",
+	"image": "/media/digiline.png",
+	"image_glitch": "/media/digiline_glitch.png",
+	"callout_left": "development • web components"
+}
