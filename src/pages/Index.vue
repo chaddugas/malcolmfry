@@ -1,7 +1,6 @@
 <template lang="pug">
 	Layout
-		main
-			app-hero
+		app-hero
 </template>
 
 <script>

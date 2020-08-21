@@ -1,7 +1,6 @@
 <template lang="pug">
-	Layout
-		main
-			app-project(:project="project")
+	Layout(v-if="project", :style="`--primary: ${project.primary}; --primary_dark: ${project.primary_dark}; --secondary: ${project.secondary}; --secondary_dark: ${project.secondary_dark}`")
+		app-project(:project="project")
 </template>
 
 <script>
@@ -17,12 +16,8 @@ export default {
 			project: null
 		}
 	},
-	computed: {
-    projects() {
-    },
-	},
-	methods: {
-	},
+	computed: {},
+	methods: {},
 	mounted() {
 		this.project = this.$page.project
 	}
@@ -43,6 +38,11 @@ query ($id: ID!) {
 		image
 		image_glitch
 		callout_left
+		study
+		primary
+		primary_dark
+		secondary
+		secondary_dark
   }
 }
 </page-query>

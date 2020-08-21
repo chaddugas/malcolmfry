@@ -1,12 +1,11 @@
 <template lang="pug">
 section.hero
-	.inner(
-		@mouseover="hovered = true",
-		@mouseleave="hovered = false")
-		.background
-			.image.pink
+	.inner(@mouseover="hovered = true", @mouseleave="hovered = false")
+		.background.tilt
+			a.contact(:href="`mailto:${content.email}`", target="_blank") {{content.email}}
+			.image.primary
 				img(:src="content.image_glitch")
-			.image.blue
+			.image.secondary
 				img(:src="content.image_glitch")
 			.image.main
 				img(:src="content.image")
@@ -32,14 +31,15 @@ section.hero
 					:interval="20",
 					:data-content="content.text_hover"
 				) {{ content.text_hover }}
-		nav.projects(:class="{active: hovered}")
+		nav.projects(:class="{ active: hovered }")
 			g-link.project(
-				tag="span"
-				v-for="project in projects"
-				@click.self.stop.prevent=""
-				:key="project.id"
-				:data-content="project.name"
-				:to="`/projects/${project.id}`") {{ project.name }}
+				tag="span",
+				v-for="project in projects",
+				@click.self.stop.prevent="",
+				:key="project.id",
+				:data-content="project.name",
+				:to="`/projects/${project.id}`"
+			) {{ project.name }}
 </template>
 
 <script>
@@ -51,6 +51,7 @@ export default {
 	mixins: [Media],
 	data() {
 		return {
+			tilter: null,
 			hovered: false,
 		};
 	},
@@ -60,17 +61,31 @@ export default {
 		},
 		projects() {
 			return this.$static.projects.edges.reduce((projects, item) => {
-				projects.push(item.node)
-				return projects
+				projects.push(item.node);
+				return projects;
 			}, []);
 		},
 	},
-	methods: {},
+	methods: {
+		tilt(create = true) {
+			if (create) {
+				setTimeout(() => {
+					VanillaTilt.init(this.tilter, {
+						max: 3,
+						speed: 800,
+					});
+				}, 500)
+			} else {
+				this.tilter.vanillaTilt.destroy();
+			}
+		},
+	},
 	mounted() {
-		VanillaTilt.init(this.$el.querySelector(".background"), {
-			max: 3,
-			speed: 800,
-		});
+		this.tilter = this.$el.querySelector(".tilt");
+		this.tilt();
+	},
+	beforeDestroy() {
+		this.tilt(false);
 	},
 };
 </script>
@@ -98,19 +113,19 @@ export default {
 
 .background {
 	position: absolute;
-	top: 0;
-	right: 0;
-	left: 0;
-	bottom: 0;
+	top: -1rem;
+	left: -1rem;
+	right: -1rem;
+	bottom: -1rem;
 	mix-blend-mode: overlay;
 	&::before,
 	&::after {
 		content: "";
 		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
+		top: 1rem;
+		left: 1rem;
+		right: 1rem;
+		bottom: 1rem;
 		border: 1rem solid $white;
 	}
 	&::before {
@@ -128,12 +143,29 @@ export default {
 	}
 }
 
+.contact {
+	position: absolute;
+	right: 1rem;
+	font-weight: 700;
+	color: $white;
+	bottom: calc(100% - 1rem);
+	font-size: 1.125rem;
+	background: $white;
+	padding: 0.875rem 1.5rem;
+	color: $black;
+	transition: 0.25s ease;
+	&:hover {
+		background: $black;
+		color: $white;
+	}
+}
+
 .image {
 	position: absolute;
-	top: 0;
-	left: 0;
-	bottom: 0;
-	height: 100%;
+	top: 1rem;
+	left: 1rem;
+	bottom: 1rem;
+	height: calc(100% - 2rem);
 	min-width: 100%;
 	overflow: hidden;
 
@@ -143,22 +175,24 @@ export default {
 		object-fit: contain;
 	}
 
-	&.pink img {
+	&.primary img {
 		left: 1rem;
 		top: -1.25rem;
 		opacity: 0.5;
-		filter: #{"contrast(200%)"} opacity(0.35) drop-shadow(0 0 0 $dark_pink) drop-shadow(
-				0 0 0 $dark_pink
-			) drop-shadow(0 0 0 $dark_pink);
+		filter: #{"contrast(200%)"} opacity(0.35) drop-shadow(
+				0 0 0 var(--primary_dark)
+			) drop-shadow(0 0 0 var(--primary_dark)) drop-shadow(0 0 0
+					var(--primary_dark));
 	}
 
 	&.blue img {
 		left: -0.5rem;
 		top: 0.25rem;
 		opacity: 0.5;
-		filter: #{"contrast(200%)"} opacity(0.25) drop-shadow(0 0 0 $dark_blue) drop-shadow(
-				0 0 0 $dark_blue
-			) drop-shadow(0 0 0 $dark_blue);
+		filter: #{"contrast(200%)"} opacity(0.25) drop-shadow(
+				0 0 0 var(--secondary_dark)
+			) drop-shadow(0 0 0 var(--secondary_dark)) drop-shadow(0 0 0
+					var(--secondary_dark));
 	}
 
 	&.main img {
@@ -170,7 +204,7 @@ export default {
 	position: absolute;
 	writing-mode: vertical-rl;
 	white-space: nowrap;
-
+	pointer-events: none;
 	span {
 		@include fluid-type(480px, 1100px, 14px, 20px);
 		display: flex;
@@ -208,7 +242,7 @@ export default {
 	&:first-of-type {
 		padding: 1.5rem 4rem 1.5rem 0;
 		top: 15%;
-		left: 0;
+		left: 1rem;
 		transform: translateX(calc(-50%));
 
 		&::before,
@@ -225,7 +259,7 @@ export default {
 	&:last-of-type {
 		padding: 1.5rem 0 1.5rem 4rem;
 		bottom: 15%;
-		right: 0;
+		right: 1rem;
 		transform: translateX(calc(50%));
 
 		&::before,
@@ -268,8 +302,8 @@ export default {
 	font-size: 2rem;
 	line-height: 1;
 	font-weight: 700;
-	text-shadow: -1px -2px 0 rgba($dark_blue, 0.35),
-		2px 1px 0 rgba($dark_pink, 0.35);
+	text-shadow: -1px -2px 0 rgba(var(--secondary_dark), 0.35),
+		2px 1px 0 rgba(var(--primary_dark), 0.35);
 	&.hidden {
 		&::before,
 		&::after {
@@ -292,13 +326,13 @@ export default {
 		transition: opacity 0.25s ease;
 	}
 	&::before {
-		color: $dark_blue;
+		color: var(--secondary_dark);
 		top: 2px;
 		left: -3px;
 		animation: noise-anim-2 15s infinite linear alternate-reverse;
 	}
 	&::after {
-		color: $pink;
+		color: var(--primary);
 		left: 3px;
 		top: -2px;
 		animation: noise-anim 5s infinite linear alternate-reverse;
@@ -349,13 +383,13 @@ export default {
 		opacity: 0;
 	}
 	&::before {
-		color: darken($dark_blue, 20%);
+		color: var(--secondary_dark);
 		top: 2px;
 		left: -3px;
 		animation: noise-anim-2 15s 1s infinite linear alternate-reverse;
 	}
 	&::after {
-		color: darken($pink, 20%);
+		color: var(--primary);
 		left: 3px;
 		top: -2px;
 		animation: noise-anim 5s 1s infinite linear alternate-reverse;
@@ -371,6 +405,7 @@ query {
 		edges {
 			node {
 				name
+				email
 				text_hover
 				image
 				image_glitch
@@ -380,12 +415,12 @@ query {
 		}
 	}
 	projects:allProject {
-    edges {
-      node {
-        id
-        name
-      }
-    }
-  }
+		edges {
+			node {
+				id
+				name
+			}
+		}
+	}
 }
 </static-query>

@@ -1,9 +1,14 @@
 {
 	"id": "digiline",
 	"name": "DIGILINE",
+	"primary": "#4e3994",
+	"primary_dark": "#62198e",
+	"secondary": "#2c75a2",
+	"secondary_dark": "#3b589a",
 	"text_hover": "read the case study...",
 	"blurb": "Platform for cross functional web components.",
 	"image": "/media/digiline.png",
 	"image_glitch": "/media/digiline_glitch.png",
+	"study": "/media/digiline_case_study.jpeg",
 	"callout_left": "development • web components"
 }

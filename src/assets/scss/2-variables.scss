@@ -1,34 +1,37 @@
-$black: #000000;
-$white: #ffffff;
-
-$gray: #F1F1FB;
+$black: #000;
+$white: #fff;
+$gray: #f1f1fb;
 $onyx: #232126;
-
-$slate: #253A52;
-
+$slate: #253a52;
 $pink: #d576c8;
 $blue: #5adef5;
-
-$dark_blue: darken($blue, 20%);
-$dark_pink: darken($pink, 15%);
-
-$palette: $pink, $blue;
+$dark_blue: darken($blue, 30%);
+$dark_pink: darken($pink, 40%);
+$primary: $pink;
+$primary_dark: $dark_pink;
+$secondary: $blue;
+$secondary_dark: $dark_blue;
+$palette: ('primary': $primary, 'primary_dark': $primary_dark, 'secondary': $secondary, 'secondary_dark': $secondary_dark);
 
 $paletteJSON: '';
-@each $color in $palette {
-	$paletteJSON: $paletteJSON + '"#{$color}",';
+@each $key, $value in $palette {
+	$paletteJSON: $paletteJSON + '"#{$value}",';
 }
-$paletteJSON: #{"[" + str-slice($paletteJSON, 1, -2) + "]"};
+$paletteJSON: #{'[' + str-slice($paletteJSON, 1, -2) + ']'};
+
+:root {
+  --palette: #{$paletteJSON};
+  @each $key, $value in $palette {
+    --#{$key}: #{$value};
+  }
+}
 
 $xs: 450px;
 $sm: 650px;
 $md: 850px;
 $lg: 1100px;
 $xl: 1400px;
-
-
 $headings: 'Inconsolata';
-
 $h_weight: 500;
 $h_size: 1.2rem;
 $body: 'Inconsolata';

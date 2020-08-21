@@ -7,8 +7,8 @@ function addStyleResource (rule) {
 }
 
 module.exports = {
-	siteName: 'MF III',
-	titleTemplate: `MF III`,
+	siteName: 'MF',
+	titleTemplate: `MF`,
   transformers: {
     remark: {
       externalLinksTarget: '_blank',

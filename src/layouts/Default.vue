@@ -1,5 +1,5 @@
 <template lang="pug">
-	#portfolio
+	.page
 		.noise
 		.gradient
 		.grid
@@ -16,6 +16,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.page {
+	overflow: hidden;
+}
+
 .noise,
 .gradient,
 .grid {
@@ -27,7 +31,7 @@ export default {
 }
 
 .noise {
-	opacity: 0.15;
+	opacity: 0.075;
   background-size: 55px 10px;
   background-repeat: repeat;
   background-image: -webkit-repeating-radial-gradient(
@@ -47,8 +51,6 @@ export default {
 
   &::before {
     content: "";
-    width: 100%;
-    height: 100%;
     position: absolute;
     mix-blend-mode: exclusion;
     background-size: 12px 22px;
@@ -93,11 +95,10 @@ export default {
 
 .gradient {
 	mix-blend-mode: overlay;
-	background: linear-gradient(to top left, $dark_pink, $pink, $blue, $dark_blue);
+	background: linear-gradient(to top left, var(--primary_dark), var(--primary), var(--secondary), var(--secondary_dark));
 }
 
 .grid {
-
   &::before {
     content: "";
     position: absolute;
