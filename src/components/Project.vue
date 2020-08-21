@@ -344,11 +344,11 @@ export default {
 
 .study {
   position: absolute;
-  top: 1rem;
-  left: 1rem;
-  right: 1rem;
-  bottom: 1rem;
-  padding: 2rem 1rem;
+  top: 2rem;
+  left: 2rem;
+  right: 2rem;
+	bottom: 2rem;
+	padding: 0;
   opacity: 0;
   pointer-events: none;
   transition: 0.25s ease;
@@ -361,12 +361,10 @@ export default {
 }
 
 .preview {
-  margin: 0 1rem;
   flex: 1 1 100%;
   img {
     width: 100%;
     object-fit: cover;
-    padding-bottom: 2rem;
   }
 }
 
