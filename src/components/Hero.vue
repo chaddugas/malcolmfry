@@ -106,8 +106,8 @@ export default {
 .inner {
 	display: flex;
 	flex-direction: column;
-	height: 60vmin;
-	width: 60vmin;
+	height: 75vh;
+	width: 75vh;
 	position: relative;
 }
 

@@ -108,14 +108,14 @@ export default {
 .inner {
   display: flex;
   flex-direction: column;
-  height: 60vmin;
-  width: 60vmin;
+  height: 75vh;
+  width: 75vh;
   position: relative;
   cursor: pointer;
   transition: 0.25s ease;
   &.opened {
-    height: 80vmin;
-    width: 80vmin;
+    height: 85vh;
+    width: 85vh;
   }
 }
 
