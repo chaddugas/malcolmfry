@@ -9,6 +9,7 @@ function addStyleResource (rule) {
 module.exports = {
 	siteName: 'MF',
 	titleTemplate: `MF`,
+	icon: 'static/media/logo/favicon.png',
   transformers: {
     remark: {
       externalLinksTarget: '_blank',
