@@ -113,7 +113,8 @@ export default {
   justify-content: center;
   align-items: center;
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
+	min-height: -webkit-fill-available; 
   position: relative;
   overflow: hidden;
 }
