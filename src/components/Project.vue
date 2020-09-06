@@ -1,10 +1,11 @@
 <template lang="pug">
-section.project(v-if="project")
+section.project(v-if="project", :class="browser.name")
   .inner(
     @mouseover="hovered = true",
     @mouseleave="hovered = false",
     @click="opened = !opened",
-    :class="{ opened }")
+    :class="{ opened }"
+  )
     .background.tilt
       .image.primary
         img(:src="project.image_glitch")
@@ -12,7 +13,9 @@ section.project(v-if="project")
         img(:src="project.image_glitch")
       .image.main
         img(:src="project.image")
-      aside.callout 
+      aside.callout(
+        v-if="media && media[0] !== 'md' && media[0] !== 'sm' && media[0] !== 'xs'"
+      )
         span {{ project.callout_left }}
     .overview
       p.blurb {{ project.blurb }}
@@ -21,7 +24,7 @@ section.project(v-if="project")
           tag="span",
           :class="{ hidden: hovered }",
           :name="'fade'",
-          :show="!hovered",
+          :show="!hovered || (media && (media[0] === 'md' || media[0] === 'sm' || media[0] === 'xs'))",
           :interval="20",
           :data-content="project.name"
         ) {{ project.name }}
@@ -29,16 +32,15 @@ section.project(v-if="project")
           tag="span",
           :class="{ hidden: !hovered }",
           :name="'fadeDown'",
-          :show="hovered",
+          :show="hovered || (media && (media[0] === 'md' || media[0] === 'sm' || media[0] === 'xs'))",
           :interval="20",
           :data-content="project.text_hover"
         ) {{ project.text_hover }}
     .study
-      .copy
-        p {{ project.content }}
+      button.close &times;
       .preview
         img(:src="project.study")
-    nav.back(:class="{ active: hovered && !opened }")
+    nav.back(:class="{ active: !opened }", @click.stop="")
       g-link.link(tag="span", data-content="back", :to="`/`") back
 </template>
 
@@ -46,6 +48,7 @@ section.project(v-if="project")
 <script>
 import Media from "@/mixins/Media";
 import "vanilla-tilt";
+import { detect } from "detect-browser";
 
 export default {
   name: "project",
@@ -56,18 +59,19 @@ export default {
       tilter: null,
       hovered: false,
       opened: false,
+      browser: detect(),
     };
   },
   computed: {},
   methods: {
     tilt(create = true) {
       if (create) {
-				setTimeout(() => {
-					VanillaTilt.init(this.tilter, {
-						max: 3,
-						speed: 800,
-					});
-				}, 500)
+        setTimeout(() => {
+          VanillaTilt.init(this.tilter, {
+            max: 3,
+            speed: 800,
+          });
+        }, 500);
       } else {
         this.tilter.vanillaTilt.destroy();
       }
@@ -75,20 +79,37 @@ export default {
   },
   watch: {
     opened() {
-      if (this.opened) {
-        this.tilt(false);
-      } else {
-        this.tilt();
+      if (this.browser.name !== "firefox") {
+        const large = this.match.find((media) => media[0] === "lg");
+        if (this.opened) {
+          this.tilt(false);
+        } else if (large[1].matches) {
+          this.tilt();
+        }
       }
     },
   },
   mounted() {
-    this.tilter = this.$el.querySelector(".tilt");
-    this.tilt();
-	},
-	beforeDestroy() {
-    this.tilt(false);
-	}
+    if (this.browser.name !== "firefox") {
+      const large = this.match.find((media) => media[0] === "lg");
+      this.tilter = this.$el.querySelector(".tilt");
+      if (large[1].matches) {
+        this.tilt();
+      }
+      large[1].addListener((e) => {
+        if (e.matches) {
+          this.tilt();
+        } else {
+          this.tilt(false);
+        }
+      });
+    }
+  },
+  beforeDestroy() {
+    if (this.browser.name !== "firefox") {
+      this.tilt(false);
+    }
+  },
 };
 </script>
 
@@ -108,14 +129,22 @@ export default {
 .inner {
   display: flex;
   flex-direction: column;
-  height: 75vh;
-  width: 75vh;
+  width: 90vw;
+  height: 90vw;
   position: relative;
   cursor: pointer;
   transition: 0.25s ease;
   &.opened {
-    height: 85vh;
-    width: 85vh;
+    height: 95vw;
+    width: 95vw;
+  }
+  @media (min-width: 950px) {
+    height: 75vh;
+    width: 75vh;
+    &.opened {
+      height: 85vh;
+      width: 85vh;
+    }
   }
 }
 
@@ -126,6 +155,8 @@ export default {
   left: 1rem;
   bottom: 1rem;
   mix-blend-mode: overlay;
+  will-change: transform;
+  transform: perspective(1000px) scale3d(1, 1, 1);
   &::before,
   &::after {
     content: "";
@@ -134,8 +165,8 @@ export default {
     left: -1rem;
     right: -1rem;
     bottom: -1rem;
-		border: 1rem solid $white;
-		pointer-events: none;
+    border: 1rem solid $white;
+    pointer-events: none;
   }
   &::before {
     background-image: linear-gradient(
@@ -201,8 +232,8 @@ export default {
   position: absolute;
   writing-mode: vertical-rl;
   white-space: nowrap;
-	pointer-events: none;
-	transition: 0.25s ease;
+  pointer-events: none;
+  transition: 0.25s ease;
   .opened & {
     opacity: 0;
   }
@@ -245,7 +276,11 @@ export default {
     padding: 1.5rem 4rem 1.5rem 0;
     bottom: 15%;
     left: -1rem;
-    transform: translateX(calc(-50%));
+    transform: translateX(-50%);
+
+    .safari & {
+      transform: translateX(-110px);
+    }
 
     &::before,
     &::after {
@@ -264,10 +299,13 @@ export default {
   height: 100%;
   flex: 0 0 100%;
   grid-template-columns: 55% 1fr;
-  grid-template-rows: 1fr 4rem;
+  grid-template-rows: 1fr auto;
   padding: 1rem;
   pointer-events: none;
   transition: 0.25s ease;
+  @media (min-width: 950px) {
+    grid-template-rows: 1fr 4rem;
+  }
   .opened & {
     opacity: 0;
     pointer-events: none;
@@ -275,12 +313,12 @@ export default {
 }
 
 .blurb {
+  @include fluid-type(480px, 1100px, 18px, 24px);
   display: flex;
   justify-content: flex-end;
   align-items: flex-start;
   text-align: right;
   padding: 4.5rem 2rem 0;
-  font-size: 1.5rem;
   line-height: 1.25;
   grid-area: 1 / 1 / 2 / 2;
 }
@@ -291,54 +329,59 @@ export default {
   position: relative;
   z-index: 0;
   margin: 0;
-  height: 4rem;
+  @media (min-width: 950px) {
+    height: 4rem;
+  }
 }
 
 .title span {
-  position: absolute;
+  @include fluid-type(480px, 1100px, 24px, 32px);
   display: block;
-  padding: 1rem 2rem;
-  margin: 0;
-  right: 0;
-  bottom: 0;
+  margin: 1rem;
   color: $white;
-  font-size: 2rem;
   line-height: 1;
   font-weight: 700;
   text-shadow: -1px -2px 0 rgba(var(--secondary_dark), 0.35),
     2px 1px 0 rgba(var(--primary_dark), 0.35);
-  &.hidden {
-    &::before,
-    &::after {
-      opacity: 0;
-    }
-  }
-  &::before,
-  &::after {
-    content: attr(data-content);
+
+  @media (min-width: 950px) {
     position: absolute;
-    z-index: -1;
-    height: 100%;
-    width: 100%;
-    top: 0;
-    left: 0;
     right: 0;
     bottom: 0;
-    mix-blend-mode: hard-light;
     padding: 1rem 2rem;
-    transition: opacity 0.25s ease;
-  }
-  &::before {
-    color: var(--secondary_dark);
-    top: 2px;
-    left: -3px;
-    animation: noise-anim-2 15s infinite linear alternate-reverse;
-  }
-  &::after {
-    color: var(--primary);
-    left: 3px;
-    top: -2px;
-    animation: noise-anim 5s infinite linear alternate-reverse;
+    &.hidden {
+      &::before,
+      &::after {
+        opacity: 0;
+      }
+    }
+    &::before,
+    &::after {
+      content: attr(data-content);
+      position: absolute;
+      z-index: -1;
+      height: 100%;
+      width: 100%;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      mix-blend-mode: hard-light;
+      padding: 1rem 2rem;
+      transition: opacity 0.25s ease;
+    }
+    &::before {
+      color: var(--secondary_dark);
+      top: 2px;
+      left: -3px;
+      animation: noise-anim-2 15s infinite linear alternate-reverse;
+    }
+    &::after {
+      color: var(--primary);
+      left: 3px;
+      top: -2px;
+      animation: noise-anim 5s infinite linear alternate-reverse;
+    }
   }
 }
 
@@ -347,24 +390,51 @@ export default {
   top: 2rem;
   left: 2rem;
   right: 2rem;
-	bottom: 2rem;
-	padding: 0;
+  bottom: 2rem;
+  padding: 0;
   opacity: 0;
   pointer-events: none;
   transition: 0.25s ease;
-  overflow-y: auto;
-  display: flex;
   .opened & {
     opacity: 1;
     pointer-events: all;
   }
 }
 
+.close {
+  border: none;
+  background: none;
+  position: absolute;
+  z-index: 2;
+  top: 1rem;
+  right: 1rem;
+  padding: 0;
+  margin: 0;
+  appearance: none;
+  color: $white;
+  font-size: 2.5rem;
+  line-height: 2.5rem;
+  overflow-y: auto;
+  cursor: pointer;
+  outline: none;
+  text-shadow: 0.0625rem 0.0625rem 0.25rem rgba($black, 0.75);
+}
+
 .preview {
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   flex: 1 1 100%;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
   img {
     width: 100%;
-    object-fit: cover;
+    min-width: 800px;
+    align-self: flex-start;
   }
 }
 

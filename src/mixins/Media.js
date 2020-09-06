@@ -5,9 +5,10 @@ export default {
 			isTouchDevice: false,
 			match: process.isClient ? [
 				["xl", window.matchMedia("(min-width: 1200px)")],
-				["lg", window.matchMedia("(min-width: 992px)")],
+				["lg", window.matchMedia("(min-width: 950px)")],
 				["md", window.matchMedia("(min-width: 768px)")],
-				["sm", window.matchMedia("(min-width: 576px)")]
+				["sm", window.matchMedia("(min-width: 576px)")],
+				["xs", window.matchMedia("(min-width: 0px)")]
 			] : []
     };
   },
@@ -17,7 +18,7 @@ export default {
     }
   },
   created() {
-    this.checkMedia();
+		this.checkMedia();
     try {
       document.createEvent("TouchEvent");
       this.isTouchDevice = true;
