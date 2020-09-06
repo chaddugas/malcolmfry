@@ -89,6 +89,17 @@ export default {
       }
     },
   },
+  created() {
+    // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
+    let vh = window.innerHeight * 0.01;
+    // Then we set the value in the --vh custom property to the root of the document
+    document.documentElement.style.setProperty("--vh", `${vh}px`);
+		window.addEventListener('resize', () => {
+			// We execute the same script as before
+			let vh = window.innerHeight * 0.01;
+			document.documentElement.style.setProperty('--vh', `${vh}px`);
+		});
+  },
   mounted() {
     if (this.browser.name !== "firefox") {
       const large = this.match.find((media) => media[0] === "lg");
@@ -121,8 +132,8 @@ export default {
   justify-content: center;
   align-items: center;
   width: 100vw;
-  min-height: 100vh;
-	min-height: -webkit-fill-available; 
+  height: 100vh; /* Fallback for browsers that do not support Custom Properties */
+  height: calc(var(--vh, 1vh) * 100);
   position: relative;
   overflow: hidden;
 }
