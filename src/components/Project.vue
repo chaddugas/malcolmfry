@@ -13,7 +13,7 @@ section.project(v-if="project", :class="browser.name")
         img(:src="project.image_glitch")
       .image.main
         img(:src="project.image")
-      aside.callout(v-show="media[0] !== 'md' && media[0] !== 'sm' && media[0] !== 'xs'")
+      aside.callout(v-show="media && (media[0] !== 'md' && media[0] !== 'sm' && media[0] !== 'xs')")
         span {{ project.callout_left }}
     .overview
       p.blurb {{ project.blurb }}
@@ -22,7 +22,7 @@ section.project(v-if="project", :class="browser.name")
           tag="span",
           :class="{ hidden: hovered }",
           :name="'fade'",
-          :show="!hovered || (media[0] === 'md' || media[0] === 'sm' || media[0] === 'xs')",
+          :show="!hovered || (media && (media[0] === 'md' || media[0] === 'sm' || media[0] === 'xs'))",
           :interval="20",
           :data-content="project.name"
         ) {{ project.name }}
@@ -30,7 +30,7 @@ section.project(v-if="project", :class="browser.name")
           tag="span",
           :class="{ hidden: !hovered }",
           :name="'fadeDown'",
-          :show="hovered || (media[0] === 'md' || media[0] === 'sm' || media[0] === 'xs')",
+          :show="hovered || (media && (media[0] === 'md' || media[0] === 'sm' || media[0] === 'xs'))",
           :interval="20",
           :data-content="project.text_hover"
         ) {{ project.text_hover }}

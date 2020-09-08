@@ -9,7 +9,7 @@ section.hero(:class="browser.name")
         img(:src="content.image_glitch")
       .image.main
         img(:src="content.image")
-      aside.callout(v-show="media[0] !== 'md' && media[0] !== 'sm' && media[0] !== 'xs'")
+      aside.callout(v-show="media && (media[0] !== 'md' && media[0] !== 'sm' && media[0] !== 'xs')")
         span {{ content.callout_left }}
       aside.callout(v-show="media[0] !== 'md' && media[0] !== 'sm' && media[0] !== 'xs'")
         span {{ content.callout_right }}
@@ -25,13 +25,9 @@ section.hero(:class="browser.name")
           :to="`/projects/${project.id}`"
         ) {{ project.name }}
     .content
-      aside.callout(
-        v-show="media && (media[0] === 'md' || media[0] === 'sm' || media[0] === 'xs')"
-      )
+      aside.callout(v-show="media && (media[0] === 'md' || media[0] === 'sm' || media[0] === 'xs')")
         span {{ content.callout_left }}
-      aside.callout(
-        v-if="media && (media[0] === 'md' || media[0] === 'sm' || media[0] === 'xs')"
-      )
+      aside.callout(v-show="media && (media[0] === 'md' || media[0] === 'sm' || media[0] === 'xs')")
         span {{ content.callout_right }}
       h1.title 
         span {{ content.name }}
