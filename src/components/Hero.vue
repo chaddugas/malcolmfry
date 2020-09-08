@@ -1,5 +1,5 @@
 <template lang="pug">
-section.hero(v-if="browser" :class="browser.name")
+section.hero(:class="browser ? browser.name : ''")
   .inner(@mouseover="hovered = true", @mouseleave="hovered = false")
     .background.tilt
       a.contact(:href="`mailto:${content.email}`", target="_blank") {{ content.email }}
