@@ -1,5 +1,5 @@
 <template lang="pug">
-section.project(v-if="project", :class="browser.name")
+section.project(v-if="project", :class="browser ? browser.name : ''")
   .inner(
     @mouseover="hovered = true",
     @mouseleave="hovered = false",
