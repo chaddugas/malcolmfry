@@ -11,7 +11,7 @@ section.hero(:class="browser.name")
         img(:src="content.image")
       aside.callout(v-show="media && (media[0] !== 'md' && media[0] !== 'sm' && media[0] !== 'xs')")
         span {{ content.callout_left }}
-      aside.callout(v-show="media[0] !== 'md' && media[0] !== 'sm' && media[0] !== 'xs'")
+      aside.callout(v-show="media && (media[0] !== 'md' && media[0] !== 'sm' && media[0] !== 'xs')")
         span {{ content.callout_right }}
       nav.projects
         h3.subtitle
