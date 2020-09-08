@@ -13,7 +13,7 @@ section.project(v-if="project", :class="browser.name")
         img(:src="project.image_glitch")
       .image.main
         img(:src="project.image")
-      aside.callout(v-if="media[0] !== 'md' && media[0] !== 'sm' && media[0] !== 'xs'")
+      aside.callout(v-show="media[0] !== 'md' && media[0] !== 'sm' && media[0] !== 'xs'")
         span {{ project.callout_left }}
     .overview
       p.blurb {{ project.blurb }}

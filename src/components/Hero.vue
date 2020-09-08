@@ -9,9 +9,9 @@ section.hero(:class="browser.name")
         img(:src="content.image_glitch")
       .image.main
         img(:src="content.image")
-      aside.callout(v-if="media[0] !== 'md' && media[0] !== 'sm' && media[0] !== 'xs'")
+      aside.callout(v-show="media[0] !== 'md' && media[0] !== 'sm' && media[0] !== 'xs'")
         span {{ content.callout_left }}
-      aside.callout(v-if="media[0] !== 'md' && media[0] !== 'sm' && media[0] !== 'xs'")
+      aside.callout(v-show="media[0] !== 'md' && media[0] !== 'sm' && media[0] !== 'xs'")
         span {{ content.callout_right }}
       nav.projects
         h3.subtitle
@@ -26,7 +26,7 @@ section.hero(:class="browser.name")
         ) {{ project.name }}
     .content
       aside.callout(
-        v-if="media && (media[0] === 'md' || media[0] === 'sm' || media[0] === 'xs')"
+        v-show="media && (media[0] === 'md' || media[0] === 'sm' || media[0] === 'xs')"
       )
         span {{ content.callout_left }}
       aside.callout(
